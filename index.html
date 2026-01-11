@@ -74,14 +74,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 60px;
+      padding: 20px 40px;
       position: relative;
       z-index: 1;
     }
     
     .flow-diagram {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
     
     .flow-diagram svg {
@@ -110,7 +111,7 @@
     
     .node-label {
       font-family: 'Inter', sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       fill: #1e293b;
       text-anchor: middle;
@@ -118,7 +119,7 @@
     
     .node-sublabel {
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       fill: #64748b;
       text-anchor: middle;
     }
@@ -139,14 +140,14 @@
     
     .legend-title {
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
       fill: #334155;
     }
     
     .legend-text {
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       fill: #64748b;
     }
     
@@ -160,7 +161,7 @@
     }
     
     .footer-content {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: 280px 1fr;
@@ -268,7 +269,7 @@
     
     <div class="diagram-wrapper">
       <div class="flow-diagram">
-        <svg viewBox="0 0 920 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 860 280" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
               <path d="M1,1 L7,4 L1,7" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
@@ -281,88 +282,88 @@
             </marker>
           </defs>
           
-          <!-- === MAIN FLOW === -->
+          <!-- === MAIN FLOW - centered === -->
           
           <!-- Feed Water -->
           <g>
-            <rect class="node-box" x="15" y="50" width="85" height="55" rx="3"/>
-            <text class="node-label" x="57" y="73">Feed Water</text>
-            <text class="node-sublabel" x="57" y="88">Seawater / Brackish</text>
+            <rect class="node-box" x="20" y="55" width="90" height="50" rx="3"/>
+            <text class="node-label" x="65" y="76">Feed Water</text>
+            <text class="node-sublabel" x="65" y="90">Seawater/Brackish</text>
           </g>
           
-          <path d="M100 77 L130 77" class="flow-line" marker-end="url(#arr)"/>
+          <path d="M110 80 L135 80" class="flow-line" marker-end="url(#arr)"/>
           
           <!-- 1. Intake & Stabilization -->
           <g>
-            <rect class="node-box" id="node1" x="135" y="50" width="115" height="55" rx="3"/>
-            <text class="node-label" x="192" y="73">Intake</text>
-            <text class="node-sublabel" x="192" y="88">& Stabilization</text>
+            <rect class="node-box" id="node1" x="140" y="55" width="100" height="50" rx="3"/>
+            <text class="node-label" x="190" y="76">Intake</text>
+            <text class="node-sublabel" x="190" y="90">& Stabilization</text>
           </g>
           
-          <path d="M250 77 L280 77" class="flow-line core" marker-end="url(#arrCore)"/>
+          <path d="M240 80 L265 80" class="flow-line core" marker-end="url(#arrCore)"/>
           
           <!-- Inert gas input -->
           <g>
-            <rect class="node-box" x="300" y="10" width="90" height="28" rx="3"/>
-            <text class="node-sublabel" x="345" y="28">Inert gas + Sorbent</text>
+            <rect class="node-box" x="280" y="12" width="100" height="28" rx="3"/>
+            <text class="node-sublabel" x="330" y="30">Inert gas + Sorbent</text>
           </g>
-          <path d="M345 38 L345 48" class="flow-line" marker-end="url(#arr)"/>
+          <path d="M330 40 L330 52" class="flow-line" marker-end="url(#arr)"/>
           
           <!-- 2. Gas-Sorbent Dosing -->
           <g>
-            <rect class="node-box core" id="node2" x="285" y="50" width="120" height="55" rx="3"/>
-            <text class="node-label" x="345" y="73">Gas-Sorbent</text>
-            <text class="node-sublabel" x="345" y="88">Dosing</text>
+            <rect class="node-box core" id="node2" x="270" y="55" width="120" height="50" rx="3"/>
+            <text class="node-label" x="330" y="76">Gas-Sorbent</text>
+            <text class="node-sublabel" x="330" y="90">Dosing</text>
           </g>
           
-          <path d="M405 77 L435 77" class="flow-line core" marker-end="url(#arrCore)"/>
+          <path d="M390 80 L415 80" class="flow-line core" marker-end="url(#arrCore)"/>
           
           <!-- 3. Sorption (Contactor) -->
           <g>
-            <rect class="node-box core" id="node3" x="440" y="50" width="115" height="55" rx="3"/>
-            <text class="node-label" x="497" y="73">Sorption</text>
-            <text class="node-sublabel" x="497" y="88">(Contactor)</text>
+            <rect class="node-box core" id="node3" x="420" y="55" width="100" height="50" rx="3"/>
+            <text class="node-label" x="470" y="76">Sorption</text>
+            <text class="node-sublabel" x="470" y="90">(Contactor)</text>
           </g>
           
-          <path d="M555 77 L585 77" class="flow-line core" marker-end="url(#arrCore)"/>
+          <path d="M520 80 L545 80" class="flow-line core" marker-end="url(#arrCore)"/>
           
           <!-- 4. Separation (Phase split) -->
           <g>
-            <rect class="node-box core" id="node4" x="590" y="50" width="115" height="55" rx="3"/>
-            <text class="node-label" x="647" y="73">Separation</text>
-            <text class="node-sublabel" x="647" y="88">(Phase split)</text>
+            <rect class="node-box core" id="node4" x="550" y="55" width="100" height="50" rx="3"/>
+            <text class="node-label" x="600" y="76">Separation</text>
+            <text class="node-sublabel" x="600" y="90">(Phase split)</text>
           </g>
           
           <!-- Residual stream -->
-          <path d="M647 105 L647 145" class="flow-line residual" marker-end="url(#arrRes)"/>
+          <path d="M600 105 L600 135" class="flow-line residual" marker-end="url(#arrRes)"/>
           <g>
-            <rect class="node-box" x="590" y="150" width="115" height="42" rx="3" style="stroke:#d97706; fill:rgba(217,119,6,0.04);"/>
-            <text class="node-sublabel" x="647" y="168" style="fill:#b45309;">Concentrate/Residual</text>
-            <text class="node-sublabel" x="647" y="182" style="fill:#92400e;">&lt;5% of flow</text>
+            <rect class="node-box" x="545" y="140" width="110" height="38" rx="3" style="stroke:#d97706; fill:rgba(217,119,6,0.04);"/>
+            <text class="node-sublabel" x="600" y="156" style="fill:#b45309;">Concentrate</text>
+            <text class="node-sublabel" x="600" y="169" style="fill:#92400e;">&lt;5% of flow</text>
           </g>
           
-          <path d="M705 77 L735 77" class="flow-line" marker-end="url(#arr)"/>
+          <path d="M650 80 L675 80" class="flow-line" marker-end="url(#arr)"/>
           
           <!-- 5. Mineralization & Polishing -->
           <g>
-            <rect class="node-box" id="node5" x="740" y="50" width="115" height="55" rx="3"/>
-            <text class="node-label" x="797" y="68">Mineralization</text>
-            <text class="node-sublabel" x="797" y="83">& Polishing</text>
-            <text class="node-sublabel" x="797" y="96" style="fill:#0891b2;">→ Drinking Water</text>
+            <rect class="node-box" id="node5" x="680" y="55" width="110" height="50" rx="3"/>
+            <text class="node-label" x="735" y="72">Mineralization</text>
+            <text class="node-sublabel" x="735" y="85">& Polishing</text>
+            <text class="node-sublabel" x="735" y="98" style="fill:#0891b2;">→ Drinking Water</text>
           </g>
           
           <!-- === LEGEND === -->
-          <g transform="translate(15, 230)">
+          <g transform="translate(20, 210)">
             <text class="legend-title" x="0" y="0">Legend</text>
             
-            <rect x="0" y="10" width="14" height="14" rx="2" fill="rgba(8,145,178,0.04)" stroke="#0891b2" stroke-width="1.5"/>
-            <text class="legend-text" x="22" y="21">AQUINTAQA core module boundary (encapsulated/protected)</text>
+            <rect x="0" y="10" width="12" height="12" rx="2" fill="rgba(8,145,178,0.04)" stroke="#0891b2" stroke-width="1.5"/>
+            <text class="legend-text" x="18" y="20">AQUINTAQA core module boundary (encapsulated/protected)</text>
             
-            <rect x="380" y="10" width="14" height="14" rx="2" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
-            <text class="legend-text" x="402" y="21">COTS-based auxiliary systems (intake, utilities, polishing, controls)</text>
+            <rect x="350" y="10" width="12" height="12" rx="2" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <text class="legend-text" x="368" y="20">COTS-based auxiliary systems (intake, utilities, polishing, controls)</text>
             
-            <text class="legend-text" x="0" y="48" style="font-style:italic;">Note: sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.</text>
-            <text class="legend-text" x="0" y="62" style="font-style:italic;">Colour coding applies to modules only, not to streams.</text>
+            <text class="legend-text" x="0" y="42" style="font-style:italic;">Note: sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.</text>
+            <text class="legend-text" x="0" y="55" style="font-style:italic;">Colour coding applies to modules only, not to streams.</text>
           </g>
         </svg>
       </div>
