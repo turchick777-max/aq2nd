@@ -11,7 +11,7 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #fbfcfd;
+      background: #fbfcfd; /* Очень светлый, почти белый фон */
       color: #0b1220;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -20,73 +20,69 @@
     /* --- VARIABLES --- */
     :root {
       --ink: #0b1220;
-      --ink-2: rgba(10,25,55,0.72);
-      --ink-3: rgba(10,25,55,0.58);
+      --ink-dim: rgba(10,25,55,0.60);
+      --ink-light: rgba(10,25,55,0.40);
 
-      /* Colors */
-      --cyan: #06b6d4; /* Чуть темнее для читаемости на светлом */
+      /* Engineering Colors */
+      --cyan: #06b6d4;
       --cyan-bright: #22d3ee;
-      --cyan-dim: rgba(6, 182, 212, 0.65);
-      --cyan-bg: rgba(34, 211, 238, 0.08);
+      --cyan-fill: rgba(34, 211, 238, 0.08);
+      --cyan-stroke: rgba(6, 182, 212, 0.65);
 
       --amber: #f59e0b;
       --amber-dim: rgba(245,158,11,0.55);
       --amber-bg: rgba(245,158,11,0.08);
 
-      --line: rgba(10,25,55,0.12);
-      --line-strong: rgba(10,25,55,0.20);
+      --line: rgba(10,25,55,0.15);       /* Тонкие линии сетки */
+      --line-strong: rgba(10,25,55,0.25); /* Контуры блоков */
       
-      --glass: rgba(255, 255, 255, 0.65);
-      --blur: 12px;
+      --glass: rgba(255, 255, 255, 0.7);
+      --blur: 10px;
     }
 
-    /* --- LAYOUT --- */
+    /* --- LAYOUT GRID --- */
     .screen2 {
       min-height: 100vh;
       position: relative;
       display: grid;
-      grid-template-columns: 320px 1fr; /* Левая колонка чуть шире для удобства чтения */
+      /* Левая колонка - меню, Правая - схема + легенда внизу */
+      grid-template-columns: 320px 1fr; 
       grid-template-rows: auto 1fr;
     }
 
-    /* --- BACKGROUND GRID --- */
+    /* --- BACKGROUND (Blueprint Grid) --- */
     .screen2::before {
       content: "";
       position: absolute;
       inset: 0;
+      /* Тонкая инженерная миллиметровка */
       background-image:
-        linear-gradient(to right, rgba(10,25,55,0.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(10,25,55,0.06) 1px, transparent 1px);
+        linear-gradient(to right, rgba(10,25,55,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10,25,55,0.05) 1px, transparent 1px);
       background-size: 20px 20px;
-      mask-image: radial-gradient(circle at center, black 40%, transparent 90%); /* Фокус в центре */
-      pointer-events: none;
       z-index: 0;
+      pointer-events: none;
     }
 
     /* --- HEADER --- */
     .header {
       grid-column: 1 / -1;
-      padding: 40px 0 20px;
+      padding: 30px 0 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
       z-index: 2;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 252, 253, 0.9);
     }
 
     .header-title {
-      font-size: 42px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
       color: var(--ink);
-      margin-bottom: 8px;
-    }
-    
-    .header-subtitle {
-      font-size: 14px;
-      color: var(--ink-3);
-      letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
@@ -102,278 +98,252 @@
     }
 
     .stages-list {
-      padding: 30px 0;
+      padding: 20px 0;
       display: flex;
       flex-direction: column;
     }
 
     .stage-item {
-      padding: 18px 32px;
+      padding: 16px 32px;
       cursor: pointer;
       border-left: 3px solid transparent;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      position: relative;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .stage-item:hover {
-      background: rgba(10,25,55,0.02);
+      background: rgba(10,25,55,0.03);
     }
 
     .stage-item.active {
       border-left-color: var(--cyan);
-      background: linear-gradient(90deg, var(--cyan-bg), transparent);
+      background: linear-gradient(90deg, var(--cyan-fill), transparent);
     }
 
     .stage-name {
       font-size: 13px;
       font-weight: 600;
-      color: var(--ink-3);
+      color: var(--ink-dim);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      transition: color 0.2s;
+      letter-spacing: 0.05em;
     }
 
     .stage-item.active .stage-name {
-      color: var(--cyan); /* Используем более темный оттенок для текста */
+      color: #000; /* Контрастный активный цвет */
     }
     
-    /* Индикатор прогресса (кружок) */
     .stage-indicator {
-      width: 8px; 
-      height: 8px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--line-strong);
-      opacity: 0.5;
-      transition: all 0.3s;
+      opacity: 0.3;
     }
     
     .stage-item.active .stage-indicator {
       background: var(--cyan-bright);
       opacity: 1;
-      box-shadow: 0 0 10px var(--cyan-bright);
     }
 
     .info-panel {
       margin-top: auto;
       padding: 32px;
       border-top: 1px solid var(--line);
-      background: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.5);
     }
 
     .info-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--cyan);
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
     }
 
     .info-text {
-      font-size: 15px;
-      color: var(--ink-2);
-      line-height: 1.6;
+      font-size: 14px;
+      color: var(--ink-dim);
+      line-height: 1.5;
     }
 
-    /* --- RIGHT COLUMN (DIAGRAM) --- */
+    /* --- RIGHT COLUMN (DIAGRAM WRAPPER) --- */
     .right-col {
-      padding: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       position: relative;
       z-index: 1;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Схема сверху, Легенда снизу */
+      padding: 40px 60px;
     }
 
     .diagram-container {
       width: 100%;
-      max-width: 900px;
+      max-width: 860px;
+      margin: 0 auto;
+      flex-grow: 1;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 24px;
+      justify-content: center;
     }
 
+    /* SVG STYLES */
     .diagram-svg {
       width: 100%;
       height: auto;
       display: block;
-      /* Фильтр для четкости на ретина дисплеях */
-      shape-rendering: geometricPrecision; 
+      overflow: visible;
     }
 
-    /* --- SVG ELEMENTS STYLING --- */
-    
     /* Lines */
     .flow-line {
-      stroke: var(--cyan-dim);
+      stroke: var(--cyan-stroke);
       stroke-width: 1.5;
-      stroke-dasharray: 6 4;
       fill: none;
-      transition: stroke-width 0.3s;
     }
-    
-    .flow-line.aux { stroke: var(--line-strong); }
-    .flow-line.residual { stroke: var(--amber-dim); }
+    .flow-line.aux { stroke: var(--line-strong); stroke-dasharray: 4 4; }
+    .flow-line.residual { stroke: var(--amber-dim); stroke-dasharray: 4 4; }
 
-    /* Nodes */
-    .node-group { cursor: default; }
-
+    /* Blocks */
     .node-box {
-      fill: rgba(255,255,255,0.9);
+      fill: #fff;
       stroke: var(--line-strong);
       stroke-width: 1.5;
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition: all 0.3s ease;
     }
 
+    /* Core Modules (Cyan) */
     .node-box.core {
-      stroke: var(--cyan-dim);
-      fill: rgba(34,211,238,0.05);
+      stroke: var(--cyan-stroke);
+      fill: var(--cyan-fill);
     }
 
-    /* Active State */
+    /* Active State (Highlight) */
     .node-group.active .node-box {
-      stroke: var(--cyan-bright);
+      stroke: var(--cyan);
       stroke-width: 2.5;
-      fill: #fff;
-      filter: url(#glow); /* Ссылка на SVG фильтр */
-    }
-    
-    .node-group.active text {
-      fill: var(--ink);
-    }
-    
-    .node-group.active .node-sublabel {
-      fill: var(--cyan);
+      filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.4));
     }
 
-    /* Text */
+    /* Text Labels in Diagram */
     .node-label {
       fill: var(--ink);
-      font-family: 'Inter', sans-serif;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 600;
       text-anchor: middle;
-      dominant-baseline: middle; /* Вертикальное центрирование */
+      dominant-baseline: middle;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: fill 0.3s;
+      letter-spacing: 0.02em;
     }
-
     .node-sublabel {
-      fill: var(--ink-3);
-      font-family: 'Inter', sans-serif;
+      fill: var(--ink-dim);
       font-size: 9px;
       text-anchor: middle;
       dominant-baseline: middle;
-      transition: fill 0.3s;
     }
-
-    /* Special Nodes */
-    .drinking-box {
-      stroke: var(--cyan-bright);
-      fill: var(--cyan-bg);
-    }
-    .drinking-label { fill: var(--cyan); }
     
-    .concentrate-box {
-      stroke: var(--amber);
-      fill: var(--amber-bg);
-    }
-    .concentrate-label { fill: var(--amber); }
-
-    /* Core Process Label */
-    .core-area-label {
-      fill: rgba(10,25,55,0.3);
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      font-weight: 600;
+    .text-on-line {
+        fill: var(--ink-dim);
+        font-size: 10px;
+        font-weight: 500;
+        text-anchor: middle;
+        background: #fbfcfd; /* Hack to hide line behind text if needed */
     }
 
-    /* --- LEGEND --- */
-    .legend {
+    /* Special Blocks */
+    .drinking-box { stroke: var(--cyan); fill: rgba(34,211,238,0.15); }
+    .drinking-label { fill: #0891b2; font-weight: 700; }
+    
+    .concentrate-box { stroke: var(--amber); fill: var(--amber-bg); }
+    .concentrate-label { fill: #d97706; }
+
+    /* --- LEGEND (Strict Layout) --- */
+    .legend-container {
       width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid var(--line); /* Жирная черта как в чертеже */
       display: flex;
-      gap: 32px;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .legend-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .legend-row {
+      display: flex;
       flex-wrap: wrap;
+      gap: 30px;
       align-items: center;
-      justify-content: center;
-      padding-top: 24px;
-      border-top: 1px solid var(--line);
     }
 
     .legend-item {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* Legend Boxes */
+    .leg-box {
+      width: 16px; height: 16px;
+      border-radius: 2px;
+    }
+    .leg-box.core {
+      background: var(--cyan-fill);
+      border: 1.5px solid var(--cyan-stroke);
+    }
+    .leg-box.aux {
+      background: #fff;
+      border: 1.5px solid var(--line-strong);
+    }
+
+    .leg-text {
       font-size: 12px;
+      color: var(--ink);
       font-weight: 500;
-      color: var(--ink-3);
+    }
+    .leg-sub {
+      color: var(--ink-dim);
+      font-weight: 400;
     }
 
-    .legend-marker {
-      width: 16px; 
-      height: 16px;
-      border-radius: 3px;
+    .legend-notes {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    
-    .legend-marker.core { border: 1.5px solid var(--cyan-dim); background: var(--cyan-bg); }
-    .legend-marker.aux { border: 1.5px solid var(--line-strong); background: #fff; }
-    
-    .legend-line-marker { height: 2px; width: 30px; }
-    .legend-line-marker.main { border-top: 2px dashed var(--cyan-bright); }
-    .legend-line-marker.res { border-top: 2px dashed var(--amber); }
 
-    /* --- RESPONSIVE --- */
+    .note-text {
+      font-size: 11px;
+      color: var(--ink-dim);
+    }
+    .note-text strong { font-weight: 600; color: var(--ink); }
+    .note-sub { font-size: 11px; color: var(--ink-light); font-style: italic; }
+
+    /* --- MOBILE --- */
     @media (max-width: 1024px) {
       .screen2 { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
-      .header { padding: 30px 20px 20px; }
-      .header-title { font-size: 32px; }
-
-      .left-col {
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .stages-list {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0;
-        scroll-behavior: smooth;
-        /* Hide scrollbar */
-        -ms-overflow-style: none;  
-        scrollbar-width: none;  
-      }
-      .stages-list::-webkit-scrollbar { display: none; }
-
-      .stage-item {
-        padding: 16px 20px;
-        white-space: nowrap;
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        flex-direction: column;
-        gap: 6px;
-        justify-content: center;
-      }
+      .left-col { border-right: none; border-bottom: 1px solid var(--line); }
+      .stages-list { flex-direction: row; overflow-x: auto; padding: 0; }
+      .stage-item { padding: 12px 16px; white-space: nowrap; border-left: none; border-bottom: 3px solid transparent; }
+      .stage-item.active { border-bottom-color: var(--cyan); }
+      .stage-indicator { display: none; }
       
-      .stage-indicator { display: none; } /* Убираем кружки на мобиле */
-
-      .stage-item.active {
-        border-bottom-color: var(--cyan);
-        background: rgba(34,211,238,0.05);
-      }
-
-      .info-panel { padding: 20px; }
-      .right-col { padding: 20px; overflow-x: auto; display: block;} /* Разрешаем скролл схемы */
+      .right-col { padding: 20px; }
+      .diagram-container { min-width: 600px; } /* Horizontal scroll fix */
+      .right-col { overflow-x: auto; display: block; } /* Allow scroll */
       
-      .diagram-container {
-        min-width: 600px; /* Фиксируем мин ширину схемы чтобы не плющилась */
-        margin: 0 auto;
-      }
+      .legend-row { gap: 15px; flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -381,11 +351,12 @@
 
   <section class="screen2">
     
+    <!-- HEADER -->
     <header class="header">
-      <h2 class="header-title">HOW IT WORKS</h2>
-      <span class="header-subtitle">Advanced Water Purification Process</span>
+      <h2 class="header-title">Process Flow</h2>
     </header>
 
+    <!-- LEFT MENU -->
     <div class="left-col">
       <nav class="stages-list">
         <div class="stage-item active" data-stage="1">
@@ -413,150 +384,153 @@
       <div class="info-panel">
         <div class="info-title" id="infoTitle">Intake &amp; Stabilization</div>
         <div class="info-text" id="infoText">
-          Coarse protection against debris, flow stabilisation and optional baseline pH/oxygen conditioning. No heavy pre-treatment trains required.
+          Coarse protection against debris, flow stabilisation. No heavy pre-treatment required.
         </div>
       </div>
     </div>
 
+    <!-- RIGHT CONTENT -->
     <div class="right-col">
+      
+      <!-- DIAGRAM -->
       <div class="diagram-container">
-        
-        <!-- SVG DIAGRAM: ViewBox 0 0 800 500 для удобной сетки -->
-        <svg class="diagram-svg" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="diagram-svg" viewBox="0 0 800 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Definitions for markers/filters -->
           <defs>
-            <!-- Фильтр свечения для активных элементов -->
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
+            <marker id="arrow-cyan" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6" fill="none" stroke="#22d3ee" stroke-width="1"/>
+            </marker>
+             <marker id="arrow-gray" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6" fill="none" stroke="rgba(10,25,55,0.25)" stroke-width="1"/>
+            </marker>
           </defs>
 
-          <!-- CONNECTING LINES (Strict Orthogonal Geometry) -->
+          <!-- CONNECTING LINES (Strict Orthogonal) -->
+          <!-- Feed to Intake -->
+          <path d="M 90 100 L 150 100" class="flow-line aux" marker-end="url(#arrow-gray)"/>
           
-          <!-- 1. Feed to Intake -->
-          <!-- Feed Box Right: 105, Center Y: 120 -> Intake Box Left: 165 -->
-          <path d="M 105 120 L 165 120" class="flow-line aux"/>
-
-          <!-- 2. Intake to Gas-Sorbent -->
-          <!-- Intake Right: 285 -> GasSorbent Left: 360. Y shifts from 120 to 160 -->
-          <path d="M 285 120 L 322 120 L 322 160 L 360 160" class="flow-line"/>
-
-          <!-- Aux: Inert Gas to Gas-Sorbent -->
-          <!-- Inert Gas Bottom: 420, 75 -> GasSorbent Top: 420, 130 -->
-          <path d="M 420 75 L 420 130" class="flow-line aux"/>
-
-          <!-- 3. Gas-Sorbent to Sorption -->
-          <!-- GasSorbent Right: 480 -> Sorption Left: 560. Y shifts 160 -> 240 -->
-          <path d="M 480 160 L 520 160 L 520 240 L 560 240" class="flow-line"/>
-
-          <!-- 4. Sorption to Separation -->
-          <!-- Sorption Right: 680 -> Separation Right Entry (Loop back) -->
-          <!-- Sorption Bottom: 620, 270 -> Separation Right: 605. Let's enter Separation from Right side at 320 -->
-          <path d="M 620 270 L 620 320 L 605 320" class="flow-line"/>
-
-          <!-- 5. Separation to Polishing -->
-          <!-- Separation Left: 485, 320 -> Polishing Top: 485, 380? Or Left? -->
-          <!-- Let's go Left out of Sep (485) -> Down -> Right into Polishing (465) -->
-          <path d="M 485 320 L 440 320 L 440 410 L 465 410" class="flow-line aux"/>
+          <!-- Intake to Gas-Sorbent -->
+          <path d="M 270 100 L 315 100 L 315 140 L 360 140" class="flow-line" marker-end="url(#arrow-cyan)"/>
           
-          <!-- Separation to Concentrate (Residual) -->
-          <!-- Separation Bottom: 545, 350 -> Concentrate Right: 220, 420 -->
-          <path d="M 545 350 L 545 445 L 220 445" class="flow-line residual"/>
-
-          <!-- 6. Polishing to Drinking -->
-          <!-- Polishing Right: 585, 410 -> Drinking Left: 620, 470 -->
-          <path d="M 585 410 L 602 410 L 602 470 L 620 470" class="flow-line aux"/>
-
-
-          <!-- NODES (Centered Logic) -->
+          <!-- Inert Gas Aux Input -->
+          <path d="M 420 55 L 420 110" class="flow-line aux" marker-end="url(#arrow-gray)"/>
           
-          <!-- NODE 0: FEED -->
+          <!-- Gas-Sorbent to Sorption -->
+          <path d="M 480 140 L 520 140 L 520 220 L 560 220" class="flow-line" marker-end="url(#arrow-cyan)"/>
+          
+          <!-- Sorption to Separation -->
+          <path d="M 620 250 L 620 300 L 605 300" class="flow-line" marker-end="url(#arrow-cyan)"/>
+          
+          <!-- Separation to Polishing -->
+          <path d="M 485 300 L 440 300 L 440 380 L 465 380" class="flow-line aux" marker-end="url(#arrow-gray)"/>
+          
+          <!-- Separation to Concentrate -->
+          <path d="M 545 330 L 545 420 L 230 420" class="flow-line residual" marker-end="url(#arrow-gray)"/>
+          
+          <!-- Polishing to Drinking -->
+          <path d="M 585 380 L 602 380 L 602 420 L 630 420" class="flow-line aux" marker-end="url(#arrow-gray)"/>
+
+
+          <!-- BLOCKS -->
+          
+          <!-- Feed Label (No box, just text as per clean request) -->
           <g class="node-group">
-            <rect class="node-box" x="40" y="90" width="65" height="60" rx="4"/>
-            <text class="node-label" x="72.5" y="112">Feed</text>
-            <text class="node-sublabel" x="72.5" y="128">Seawater</text>
+             <text class="text-on-line" x="60" y="95">Feed Water</text>
+             <text class="text-on-line" x="60" y="108" font-size="9" fill="#999">(Seawater)</text>
           </g>
 
-          <!-- NODE 1: INTAKE -->
+          <!-- 1. Intake -->
           <g class="node-group" id="node1">
-            <rect class="node-box" x="165" y="90" width="120" height="60" rx="4"/>
-            <text class="node-label" x="225" y="112">Intake</text>
-            <text class="node-sublabel" x="225" y="128">&amp; Stabilization</text>
+            <rect class="node-box" x="150" y="70" width="120" height="60" rx="2"/>
+            <text class="node-label" x="210" y="92">Intake</text>
+            <text class="node-sublabel" x="210" y="108">&amp; Stabilization</text>
           </g>
 
-          <!-- AUX: INERT GAS -->
+          <!-- Aux: Inert Gas -->
           <g class="node-group">
-            <rect class="node-box" x="365" y="30" width="110" height="45" rx="4"/>
-            <text class="node-label" x="420" y="48">Inert Gas</text>
-            <text class="node-sublabel" x="420" y="62">+ Sorbent</text>
+            <rect class="node-box" x="365" y="10" width="110" height="45" rx="2"/>
+            <text class="node-label" x="420" y="28">Inert Gas</text>
+            <text class="node-sublabel" x="420" y="42">+ Sorbent</text>
           </g>
 
-          <!-- NODE 2: GAS-SORBENT -->
+          <!-- 2. Gas-Sorbent -->
           <g class="node-group" id="node2">
-            <rect class="node-box core" x="360" y="130" width="120" height="60" rx="4"/>
-            <text class="node-label" x="420" y="152">Gas-Sorbent</text>
-            <text class="node-sublabel" x="420" y="168">Dosing</text>
+            <rect class="node-box core" x="360" y="110" width="120" height="60" rx="2"/>
+            <text class="node-label" x="420" y="132">Gas-Sorbent</text>
+            <text class="node-sublabel" x="420" y="148">Dosing</text>
           </g>
 
-          <!-- LABELS -->
-          <text class="core-area-label" x="310" y="170">CORE</text>
-          <text class="core-area-label" x="310" y="182">PROCESS</text>
-
-          <!-- NODE 3: SORPTION -->
+          <!-- 3. Sorption -->
           <g class="node-group" id="node3">
-            <rect class="node-box core" x="560" y="210" width="120" height="60" rx="4"/>
-            <text class="node-label" x="620" y="232">Sorption</text>
-            <text class="node-sublabel" x="620" y="248">Contactor</text>
+            <rect class="node-box core" x="560" y="190" width="120" height="60" rx="2"/>
+            <text class="node-label" x="620" y="212">Sorption</text>
+            <text class="node-sublabel" x="620" y="228">Contactor</text>
           </g>
 
-          <!-- NODE 4: SEPARATION -->
+          <!-- 4. Separation -->
           <g class="node-group" id="node4">
-            <rect class="node-box core" x="485" y="290" width="120" height="60" rx="4"/>
-            <text class="node-label" x="545" y="312">Separation</text>
-            <text class="node-sublabel" x="545" y="328">Phase Split</text>
+            <rect class="node-box core" x="485" y="270" width="120" height="60" rx="2"/>
+            <text class="node-label" x="545" y="292">Separation</text>
+            <text class="node-sublabel" x="545" y="308">Phase Split</text>
           </g>
 
-          <!-- NODE 5: POLISHING -->
+          <!-- 5. Polishing -->
           <g class="node-group" id="node5">
-            <rect class="node-box" x="465" y="380" width="120" height="60" rx="4"/>
-            <text class="node-label" x="525" y="402">Polishing</text>
-            <text class="node-sublabel" x="525" y="418">&amp; Mineral.</text>
+            <rect class="node-box" x="465" y="350" width="120" height="60" rx="2"/>
+            <text class="node-label" x="525" y="372">Polishing</text>
+            <text class="node-sublabel" x="525" y="388">&amp; Mineral.</text>
           </g>
 
-          <!-- AUX: CONCENTRATE -->
+          <!-- Output: Concentrate -->
           <g class="node-group">
-            <rect class="node-box concentrate-box" x="120" y="420" width="100" height="50" rx="4"/>
-            <text class="node-label concentrate-label" x="170" y="440">Concentrate</text>
-            <text class="node-sublabel" x="170" y="455">&lt;5% flow</text>
+            <rect class="node-box concentrate-box" x="120" y="395" width="110" height="50" rx="2"/>
+            <text class="node-label concentrate-label" x="175" y="415">Concentrate</text>
+            <text class="node-sublabel" x="175" y="430">&lt;5% flow</text>
           </g>
 
-          <!-- AUX: DRINKING WATER -->
+          <!-- Output: Drinking -->
           <g class="node-group">
-            <rect class="node-box drinking-box" x="620" y="445" width="110" height="50" rx="4"/>
-            <text class="node-label drinking-label" x="675" y="465">Drinking</text>
-            <text class="node-sublabel" x="675" y="480">Water</text>
+            <rect class="node-box drinking-box" x="630" y="395" width="110" height="50" rx="2"/>
+            <text class="node-label drinking-label" x="685" y="415">Drinking</text>
+            <text class="node-sublabel" x="685" y="430">Water</text>
           </g>
         </svg>
+      </div>
 
-        <div class="legend">
+      <!-- LEGEND (Bottom Block) -->
+      <div class="legend-container">
+        <div class="legend-title">LEGEND</div>
+        
+        <div class="legend-row">
+          <!-- Item 1 -->
           <div class="legend-item">
-            <span class="legend-marker core"></span>
-            <span>Core Module</span>
+            <div class="leg-box core"></div>
+            <div class="leg-text">
+              AQUINTAQA core module boundary
+              <span class="leg-sub">(encapsulated/protected)</span>
+            </div>
           </div>
+          
+          <!-- Item 2 -->
           <div class="legend-item">
-            <span class="legend-marker aux"></span>
-            <span>Auxiliary</span>
+            <div class="leg-box aux"></div>
+            <div class="leg-text">
+              COTS-based auxiliary systems
+              <span class="leg-sub">(intake, utilities, polishing, controls)</span>
+            </div>
           </div>
-          <div class="legend-item">
-            <span class="legend-line-marker main"></span>
-            <span>Main flow</span>
+        </div>
+
+        <div class="legend-notes">
+          <div class="note-text">
+            <strong>Note:</strong> Sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.
           </div>
-          <div class="legend-item">
-            <span class="legend-line-marker res"></span>
-            <span>Residual</span>
+          <div class="note-sub">
+            Colour coding applies to modules only, not to streams.
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -570,7 +544,6 @@
     };
 
     let currentStage = 1;
-    let isAutoPlaying = true;
     let autoPlayTimer;
 
     const stageItems = document.querySelectorAll('.stage-item');
@@ -580,20 +553,16 @@
     function setActiveStage(stage) {
       currentStage = stage;
 
-      // Update Left Menu
       stageItems.forEach(item => {
-        const isActive = parseInt(item.dataset.stage, 10) === stage;
-        item.classList.toggle('active', isActive);
+        item.classList.toggle('active', parseInt(item.dataset.stage, 10) === stage);
       });
 
-      // Update SVG Nodes
       document.querySelectorAll('.node-group').forEach(node => node.classList.remove('active'));
       const activeNode = document.getElementById(`node${stage}`);
       if (activeNode) activeNode.classList.add('active');
 
-      // Update Info Text with Fade Effect
       const infoPanel = document.querySelector('.info-panel');
-      infoPanel.style.opacity = '0.5';
+      infoPanel.style.opacity = '0.6';
       
       setTimeout(() => {
         const data = stageData[stage];
@@ -606,42 +575,22 @@
     }
 
     function startAutoPlay() {
-      stopAutoPlay(); // Clear existing to be safe
+      clearInterval(autoPlayTimer);
       autoPlayTimer = setInterval(() => {
-        if (isAutoPlaying) {
           let next = currentStage + 1;
           if (next > 5) next = 1;
           setActiveStage(next);
-        }
-      }, 3500); // 3.5 seconds
+      }, 4000);
     }
 
-    function stopAutoPlay() {
-      clearInterval(autoPlayTimer);
-    }
-
-    // Event Listeners
     stageItems.forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        isAutoPlaying = false;
-        stopAutoPlay();
-        setActiveStage(parseInt(item.dataset.stage, 10));
-      });
-      
       item.addEventListener('click', () => {
-        isAutoPlaying = false;
-        stopAutoPlay();
+        clearInterval(autoPlayTimer);
         setActiveStage(parseInt(item.dataset.stage, 10));
       });
     });
 
-    // Resume autoplay when mouse leaves the left column area
-    document.querySelector('.left-col').addEventListener('mouseleave', () => {
-       isAutoPlaying = true;
-       startAutoPlay();
-    });
-
-    // Init
+    // Start
     setActiveStage(1);
     startAutoPlay();
   </script>
