@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQUINTAQA - How It Works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      /* Базовый цвет фона — светло-серый с лёгким голубым */
+      background-color: #e8ecf0;
+    }
+    
+    .screen2 {
+      min-height: 100vh;
+      padding: 50px;
+      position: relative;
+    }
+    
+    /* Точечная сетка как на картинке */
+    .screen2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      /* Точки на пересечениях — radial gradient */
+      background-image: 
+        radial-gradient(circle, rgba(150, 170, 190, 0.4) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+    
+    .title {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #5a6a7a;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <section class="screen2">
+    <h2 class="title">How It Works</h2>
+  </section>
+</body>
+</html>
