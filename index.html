@@ -1,128 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AQUINTAQA - How It Works</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body{
-      font-family: Inter, -apple-system, system-ui, sans-serif;
-      min-height: 100vh;
-      background:#e8ecf0;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    .screen2{
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
       min-height: 100vh;
-      padding: 56px;
+      background-color: #e8ecf0;
+    }
+    
+    .screen2 {
+      min-height: 100vh;
+      padding: 80px 50px;
       position: relative;
       overflow: hidden;
-      background:#e8ecf0;
     }
-
-    /* ====== BLURRY BLUEPRINT BACKGROUND (как на скрине) ====== */
-    .screen2::before{
-      content:"";
-      position:absolute;
-      inset:-40px;                 /* чтобы блюр не обрезался по краям */
-      pointer-events:none;
-
-      /* Слои:
-         1) мягкая бумажная фактура / виньетка
-         2) размытая микро-сетка
-         3) размытая крупная сетка
-         4) точки в узлах (пересечения) */
-      background-image:
-        /* 1) бумага/виньетка */
-        radial-gradient(900px 520px at 50% 10%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 60%),
-        radial-gradient(900px 600px at 50% 110%, rgba(120,150,180,0.14) 0%, rgba(120,150,180,0) 62%),
-
-        /* 2) микро-сетка (очень мягкая) */
-        repeating-linear-gradient(to right, rgba(120,140,160,0.16) 0 1px, transparent 1px 22px),
-        repeating-linear-gradient(to bottom, rgba(120,140,160,0.16) 0 1px, transparent 1px 22px),
-
-        /* 3) крупная сетка (чуть заметнее) */
-        repeating-linear-gradient(to right, rgba(85,105,125,0.20) 0 1px, transparent 1px 132px),
-        repeating-linear-gradient(to bottom, rgba(85,105,125,0.20) 0 1px, transparent 1px 132px),
-
-        /* 4) точки на узлах */
-        radial-gradient(circle, rgba(110,130,150,0.45) 1px, transparent 1.6px);
-
-      /* шаги:
-         - микро: 22px
-         - крупная: 132px
-         - точки: 22px (чтобы совпадали с микро-узлами)
-      */
-      background-size:
-        auto, auto,
-        auto, auto,
-        auto, auto,
-        22px 22px;
-
-      /* смещаем точки на “углы клеток” */
-      background-position:
-        center, center,
-        0 0, 0 0,
-        0 0, 0 0,
-        0px 0px;
-
-      /* Главное: сделать всё “нечетким/размытым” как на образце */
-      filter: blur(1.25px) contrast(0.95) saturate(0.95);
-      opacity: 0.85;
-      transform: translateZ(0);
+    
+    /* Сетка линий - более размытая и небрежная */
+    .screen2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      /* Очень тонкие и едва заметные линии сетки */
+      background-image: 
+        linear-gradient(to right, rgba(180, 190, 200, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(180, 190, 200, 0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(0.3px);
     }
-
-    /* лёгкий “шум/бумага”, чтобы было менее цифрово (очень мягко) */
-    .screen2::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(0,0,0,0.03) 0 1px, transparent 2px),
-        radial-gradient(circle at 70% 60%, rgba(0,0,0,0.02) 0 1px, transparent 2px);
-      background-size: 120px 120px, 180px 180px;
-      mix-blend-mode: multiply;
-      opacity: 0.25;
-      filter: blur(0.4px);
+    
+    /* Точки в УГЛАХ клеток, а не на пересечениях линий */
+    .screen2::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle, rgba(140, 160, 180, 0.25) 1px, transparent 1px);
+      background-size: 40px 40px;
+      /* Сдвигаем на половину клетки, чтобы точки были в углах, а не на линиях */
+      background-position: 20px 20px;
+      pointer-events: none;
+      z-index: 1;
+      filter: blur(0.5px);
     }
-
-    /* ===== Title ближе к скрину: темнее и крупнее ===== */
-    .title{
+    
+    .content {
       position: relative;
       z-index: 2;
-      text-align:center;
-      font-size: 44px;          /* крупнее */
-      font-weight: 500;
-      letter-spacing: 0.22em;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: rgba(55,65,75,0.85); /* темнее/серее как на скрине */
-      margin-top: 10px;
-    }
-
-    /* тонкая горизонтальная линия под заголовком */
-    .title::after{
-      content:"";
-      display:block;
-      height: 1px;
-      width: min(980px, 88%);
-      margin: 22px auto 0;
-      background: rgba(80,95,110,0.18);
-      filter: blur(0.2px);
-    }
-
-    @media (max-width: 768px){
-      .screen2{ padding: 32px 18px; }
-      .title{ font-size: 28px; letter-spacing: 0.18em; }
+      color: #3a4a5a;
+      margin-bottom: 80px;
     }
   </style>
 </head>
 <body>
   <section class="screen2">
-    <h2 class="title">How It Works</h2>
+    <div class="content">
+      <h2 class="title">How It Works</h2>
+    </div>
   </section>
 </body>
 </html>
