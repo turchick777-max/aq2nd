@@ -1,56 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AQUINTAQA - How It Works</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       min-height: 100vh;
-      /* Базовый цвет фона — светло-серый с лёгким голубым */
-      background-color: #e8ecf0;
+      background: #e8ecf0; /* база как у тебя */
     }
-    
+
     .screen2 {
       min-height: 100vh;
-      padding: 50px;
+      padding: 56px 56px;
       position: relative;
+      overflow: hidden;
+      background: #e8ecf0;
     }
-    
-    /* Точечная сетка как на картинке */
+
+    /* ===== LAYERED TECH GRID BACKGROUND (как в образце) ===== */
     .screen2::before {
       content: '';
       position: absolute;
       inset: 0;
-      /* Точки на пересечениях — radial gradient */
-      background-image: 
-        radial-gradient(circle, rgba(150, 170, 190, 0.4) 1px, transparent 1px);
-      background-size: 20px 20px;
       pointer-events: none;
+
+      /* Слои (снизу вверх):
+         1) мягкая виньетка/световой градиент
+         2) тонкая “малая” сетка (каждые 20px)
+         3) “большая” сетка (каждые 100px)
+         4) точки на пересечениях (каждые 20px)
+      */
+      background-image:
+        /* 1) мягкая виньетка */
+        radial-gradient(1200px 700px at 50% 20%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 55%),
+        radial-gradient(900px 600px at 50% 110%, rgba(120,150,180,0.14) 0%, rgba(120,150,180,0) 60%),
+
+        /* 2) малая сетка */
+        linear-gradient(to right, rgba(120,140,160,0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,140,160,0.14) 1px, transparent 1px),
+
+        /* 3) большая сетка (реже и чуть заметнее) */
+        linear-gradient(to right, rgba(90,110,130,0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(90,110,130,0.18) 1px, transparent 1px),
+
+        /* 4) точки */
+        radial-gradient(circle, rgba(120,140,160,0.32) 1px, transparent 1px);
+
+      /* Настройка размеров слоёв:
+         малая сетка и точки: 20px
+         большая сетка: 100px
+      */
+      background-size:
+        auto, auto,
+        20px 20px, 20px 20px,
+        100px 100px, 100px 100px,
+        20px 20px;
+
+      /* Сдвиг слоёв, чтобы точки выглядели “как в чертеже” */
+      background-position:
+        center, center,
+        0 0, 0 0,
+        0 0, 0 0,
+        0 0;
+
+      /* лёгкое “смягчение”, чтобы не было слишком контрастно */
+      filter: saturate(1.02) contrast(1.02);
     }
-    
+
+    /* Дополнительный слой — диагональные/служебные линии (очень деликатно) */
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.35;
+      background:
+        linear-gradient(135deg, transparent 0 49.6%, rgba(120,140,160,0.12) 50%, transparent 50.4%),
+        linear-gradient(45deg,  transparent 0 49.6%, rgba(120,140,160,0.08) 50%, transparent 50.4%);
+      background-size: 380px 380px, 520px 520px;
+      background-position: 20px 60px, 120px 220px;
+      mix-blend-mode: multiply;
+    }
+
+    /* ===== TITLE ===== */
     .title {
-      text-align: center;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #5a6a7a;
       position: relative;
-      z-index: 1;
+      z-index: 2;
+      text-align: center;
+
+      /* крупнее и темнее */
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #2f3b46;
+
+      margin-top: 6px;
+    }
+
+    /* Лёгкая линия/ось под заголовком как в тех-схемах */
+    .title::after {
+      content: '';
+      display: block;
+      width: 220px;
+      height: 1px;
+      margin: 18px auto 0;
+      background: rgba(70, 90, 110, 0.25);
+    }
+
+    /* адаптив — на мобиле меньше поля и чуть меньше заголовок */
+    @media (max-width: 768px) {
+      .screen2 { padding: 32px 18px; }
+      .title { font-size: 16px; letter-spacing: 0.18em; }
+      .title::after { width: 160px; }
     }
   </style>
 </head>
 <body>
   <section class="screen2">
+    <div class="grid-overlay"></div>
     <h2 class="title">How It Works</h2>
   </section>
 </body>
