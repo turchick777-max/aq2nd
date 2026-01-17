@@ -49,6 +49,10 @@
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica;
   background: var(--bg);
+  /* Text rendering optimization */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
 }
 
 /* ===== Screen container with double grid ===== */
@@ -62,6 +66,11 @@ body {
     linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
   background-color: var(--bg);
   background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px;
+  /* Prevent repaints on scroll */
+  background-attachment: local;
+  /* GPU acceleration for background */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .hiw__sheet {
@@ -133,6 +142,8 @@ body {
 .hiw__header {
   padding: 8px 10px 28px;
   text-align: center;
+  /* Optimize rendering */
+  contain: layout style;
 }
 
 .hiw__title {
@@ -158,6 +169,8 @@ body {
   box-shadow: var(--shadow);
   overflow: hidden;
   padding: 40px 20px;
+  /* Optimize rendering containment */
+  contain: layout style paint;
 }
 
 .hiw__watermark {
@@ -169,7 +182,11 @@ body {
     linear-gradient(30deg, rgba(100,116,139,.22), transparent 55%),
     linear-gradient(140deg, rgba(100,116,139,.18), transparent 60%);
   pointer-events: none;
-  mix-blend-mode: multiply;
+  /* Remove expensive blend mode, rely on opacity */
+  /* mix-blend-mode: multiply; */
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .hiw__diagram {
@@ -182,6 +199,9 @@ body {
   width: 100%;
   height: auto;
   display: block;
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 /* ===== SVG Styles ===== */
@@ -209,7 +229,10 @@ body {
 .moduleBox {
   stroke-width: 2.5;
   paint-order: stroke fill;
-  transition: all 0.3s ease;
+  /* Optimized transitions - only transform properties */
+  transition: stroke-width 0.3s ease, stroke 0.3s ease;
+  /* GPU layer hint */
+  will-change: stroke-width, stroke;
 }
 
 .module .moduleTitle {
@@ -260,7 +283,8 @@ body {
   fill: none;
   stroke: var(--stream);
   stroke-width: 3;
-  transition: all 0.3s ease;
+  /* Specific properties only */
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
 }
 
 .stream.dashed {
@@ -284,11 +308,12 @@ body {
   stroke-dasharray: 10 8;
 }
 
-/* Active state */
+/* Active state - optimized for GPU */
 .module.is-active .moduleBox {
   stroke: rgba(0,158,186,1);
   stroke-width: 3.5;
-  filter: drop-shadow(0 0 8px rgba(0,158,186,0.3));
+  /* Replace filter with simple shadow for better performance */
+  filter: drop-shadow(0 0 6px rgba(0,158,186,0.25));
 }
 
 /* ===== Interactive Panel (from Screenshot 1) ===== */
@@ -298,6 +323,8 @@ body {
   border-radius: 18px;
   box-shadow: var(--shadow);
   overflow: hidden;
+  /* Rendering optimization */
+  contain: layout style paint;
 }
 
 /* Top tabs */
@@ -320,9 +347,12 @@ body {
   color: rgba(71,85,105,0.85);
   cursor: pointer;
   position: relative;
-  transition: all 0.25s ease;
+  /* Optimize transitions - only color and background */
+  transition: background-color 0.25s ease, color 0.25s ease;
   text-align: center;
   white-space: nowrap;
+  /* Prevent layout shifts */
+  contain: layout style;
 }
 
 .hiw__tab:hover {
@@ -378,8 +408,11 @@ body {
   margin-bottom: 4px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  /* Specific transitions only */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
   border: 1px solid transparent;
+  /* Contain to prevent layout thrashing */
+  contain: layout style;
 }
 
 .hiw__stage-item:hover {
@@ -403,7 +436,10 @@ body {
   font: 700 13px ui-sans-serif, system-ui;
   color: rgba(100,116,139,0.85);
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  /* Specific transitions */
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  /* Prevent layout shifts */
+  contain: layout style paint;
 }
 
 .hiw__stage-item.is-active .hiw__stage-number {
@@ -612,7 +648,8 @@ body {
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
               </marker>
               <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="rgba(15,23,42,0.08)" />
+                <!-- Optimized shadow with reduced blur -->
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(15,23,42,0.06)" />
               </filter>
             </defs>
 
@@ -804,6 +841,19 @@ body {
   const AUTOPLAY = true;
   const AUTOPLAY_INTERVAL = 5000; // 5 seconds per stage
   
+  // Debounce helper for performance
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+  
   const stages = [
     {
       id: 'intake',
@@ -863,25 +913,30 @@ body {
   function setActiveStage(index, pauseAutoplay = false) {
     currentStage = index;
     
-    // Clear all active states
-    tabs.forEach(tab => tab.classList.remove('is-active'));
-    sidebarItems.forEach(item => item.classList.remove('is-active'));
-    Object.values(moduleMap).forEach(module => module.classList.remove('is-active'));
-    
-    // Set new active states
-    tabs[index].classList.add('is-active');
-    sidebarItems[index].classList.add('is-active');
-    
+    // Batch DOM reads first (avoid layout thrashing)
     const stage = stages[index];
     const module = moduleMap[stage.id];
-    if (module) {
-      module.classList.add('is-active');
-    }
     
-    // Update detail text
-    detailKicker.textContent = stage.kicker;
-    detailTitle.textContent = stage.title;
-    detailText.textContent = stage.detail;
+    // Batch DOM writes using requestAnimationFrame
+    requestAnimationFrame(() => {
+      // Clear all active states
+      tabs.forEach(tab => tab.classList.remove('is-active'));
+      sidebarItems.forEach(item => item.classList.remove('is-active'));
+      Object.values(moduleMap).forEach(m => m.classList.remove('is-active'));
+      
+      // Set new active states (batched)
+      tabs[index].classList.add('is-active');
+      sidebarItems[index].classList.add('is-active');
+      
+      if (module) {
+        module.classList.add('is-active');
+      }
+      
+      // Update text content (batched)
+      detailKicker.textContent = stage.kicker;
+      detailTitle.textContent = stage.title;
+      detailText.textContent = stage.detail;
+    });
     
     // Reset autoplay if needed
     if (pauseAutoplay && AUTOPLAY) {
@@ -917,16 +972,16 @@ body {
     autoplayTimer = setInterval(nextStage, AUTOPLAY_INTERVAL);
   }
   
-  // Pause autoplay on hover
+  // Pause autoplay on hover (passive listeners)
   const panel = document.querySelector('.hiw__interactive-panel');
   if (panel && AUTOPLAY) {
     panel.addEventListener('mouseenter', () => {
       clearInterval(autoplayTimer);
-    });
+    }, { passive: true });
     
     panel.addEventListener('mouseleave', () => {
       autoplayTimer = setInterval(nextStage, AUTOPLAY_INTERVAL);
-    });
+    }, { passive: true });
   }
 })();
 </script>
