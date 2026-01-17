@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HOW IT WORKS - AQUINTAQA</title>
+<!-- Performance hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <style>
 :root {
   /* Variant B — LOCKED (from PDF page 24-25) */
@@ -37,7 +39,8 @@
   --conc: #D28437;
   --conc-fill: #FCF0E5;
   
-  --shadow: 0 18px 50px rgba(15,23,42,0.08);
+  /* Optimized shadow using CSS var for consistency and caching */
+  --shadow: 0 12px 40px rgba(15,23,42,0.06);
 }
 
 * {
@@ -49,6 +52,12 @@
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica;
   background: var(--bg);
+  /* Text rendering optimization */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+  /* Prevent text inflation on mobile */
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ===== Screen container with double grid ===== */
@@ -62,6 +71,11 @@ body {
     linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
   background-color: var(--bg);
   background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px;
+  /* Prevent repaints on scroll */
+  background-attachment: local;
+  /* GPU acceleration for background */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .hiw__sheet {
@@ -80,6 +94,9 @@ body {
   border: 2px solid var(--frame);
   border-radius: 20px;
   pointer-events: none;
+  /* Optimize rendering */
+  contain: layout style paint;
+  transform: translateZ(0);
 }
 
 .hiw__frame::after {
@@ -88,6 +105,8 @@ body {
   inset: 10px;
   border: 1px solid var(--frame2);
   border-radius: 16px;
+  /* Optimize pseudo-element */
+  will-change: auto;
 }
 
 .hiw__corner {
@@ -95,6 +114,8 @@ body {
   width: 18px;
   height: 18px;
   border-color: var(--frame);
+  /* Optimize rendering */
+  contain: layout style paint;
 }
 
 .hiw__corner.tl {
@@ -133,6 +154,8 @@ body {
 .hiw__header {
   padding: 8px 10px 28px;
   text-align: center;
+  /* Optimize rendering */
+  contain: layout style;
 }
 
 .hiw__title {
@@ -147,6 +170,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  /* Optimize rendering */
+  contain: layout style;
 }
 
 /* ===== Diagram Container ===== */
@@ -158,6 +183,8 @@ body {
   box-shadow: var(--shadow);
   overflow: hidden;
   padding: 40px 20px;
+  /* Optimize rendering containment */
+  contain: layout style paint;
 }
 
 .hiw__watermark {
@@ -169,30 +196,48 @@ body {
     linear-gradient(30deg, rgba(100,116,139,.22), transparent 55%),
     linear-gradient(140deg, rgba(100,116,139,.18), transparent 60%);
   pointer-events: none;
-  mix-blend-mode: multiply;
+  /* Remove expensive blend mode, rely on opacity */
+  /* mix-blend-mode: multiply; */
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .hiw__diagram {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  /* Prevent unnecessary pointer event handling */
+  pointer-events: none;
+}
+
+.hiw__diagram .module {
+  /* Re-enable pointer events only where needed */
+  pointer-events: auto;
 }
 
 .hiw__svg {
   width: 100%;
   height: auto;
   display: block;
+  /* GPU acceleration */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 /* ===== SVG Styles ===== */
 .svgLabel {
   font: 600 14px ui-sans-serif, system-ui;
   fill: rgba(15,23,42,.75);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .svgSubLabel {
   font: 500 12px ui-sans-serif, system-ui;
   fill: rgba(71,85,105,.78);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .svgCalloutBox {
@@ -204,47 +249,64 @@ body {
 .svgCalloutText {
   font: 600 12px ui-sans-serif, system-ui;
   fill: rgba(15,23,42,.78);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .moduleBox {
   stroke-width: 2.5;
   paint-order: stroke fill;
-  transition: all 0.3s ease;
+  /* Optimized transitions - only transform properties */
+  transition: stroke-width 0.3s ease, stroke 0.3s ease;
+  /* GPU layer hint */
+  will-change: stroke-width, stroke;
 }
 
 .module .moduleTitle {
   font: 700 15px ui-sans-serif, system-ui;
   fill: rgba(15,23,42,.85);
   letter-spacing: 0.04em;
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .module .moduleSub {
   font: 500 12px ui-sans-serif, system-ui;
   fill: rgba(71,85,105,.82);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 /* Core modules */
 .module.core .moduleBox {
   fill: var(--core-fill);
   stroke: rgba(0,158,186,.75);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 /* COTS modules */
 .module.cots .moduleBox {
   fill: var(--cots-fill);
   stroke: var(--cots-stroke);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 /* Product */
 .module.product .moduleBox {
   fill: rgba(212,241,246,.75);
   stroke: rgba(0,158,186,.65);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 /* Concentrate */
 .module.concentrate .moduleBox {
   fill: var(--conc-fill);
   stroke: rgba(210,132,55,.85);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 .module.concentrate .moduleTitle {
@@ -260,7 +322,8 @@ body {
   fill: none;
   stroke: var(--stream);
   stroke-width: 3;
-  transition: all 0.3s ease;
+  /* Specific properties only */
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
 }
 
 .stream.dashed {
@@ -284,11 +347,12 @@ body {
   stroke-dasharray: 10 8;
 }
 
-/* Active state */
+/* Active state - optimized for GPU */
 .module.is-active .moduleBox {
   stroke: rgba(0,158,186,1);
   stroke-width: 3.5;
-  filter: drop-shadow(0 0 8px rgba(0,158,186,0.3));
+  /* Replace filter with simple shadow for better performance */
+  filter: drop-shadow(0 0 6px rgba(0,158,186,0.25));
 }
 
 /* ===== Interactive Panel (from Screenshot 1) ===== */
@@ -298,6 +362,8 @@ body {
   border-radius: 18px;
   box-shadow: var(--shadow);
   overflow: hidden;
+  /* Rendering optimization */
+  contain: layout style paint;
 }
 
 /* Top tabs */
@@ -320,9 +386,12 @@ body {
   color: rgba(71,85,105,0.85);
   cursor: pointer;
   position: relative;
-  transition: all 0.25s ease;
+  /* Optimize transitions - only color and background */
+  transition: background-color 0.25s ease, color 0.25s ease;
   text-align: center;
   white-space: nowrap;
+  /* Prevent layout shifts */
+  contain: layout style;
 }
 
 .hiw__tab:hover {
@@ -344,6 +413,9 @@ body {
   right: 0;
   height: 3px;
   background: var(--accent);
+  /* GPU optimization */
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Content area */
@@ -378,8 +450,11 @@ body {
   margin-bottom: 4px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  /* Specific transitions only */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
   border: 1px solid transparent;
+  /* Contain to prevent layout thrashing */
+  contain: layout style;
 }
 
 .hiw__stage-item:hover {
@@ -403,7 +478,10 @@ body {
   font: 700 13px ui-sans-serif, system-ui;
   color: rgba(100,116,139,0.85);
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  /* Specific transitions */
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  /* Prevent layout shifts */
+  contain: layout style paint;
 }
 
 .hiw__stage-item.is-active .hiw__stage-number {
@@ -429,6 +507,8 @@ body {
   padding: 24px 28px;
   display: flex;
   flex-direction: column;
+  /* Optimize text rendering */
+  contain: layout style;
 }
 
 .hiw__detail-header {
@@ -603,7 +683,7 @@ body {
         <div class="hiw__watermark" aria-hidden="true"></div>
         
         <div class="hiw__diagram">
-          <svg class="hiw__svg" viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg">
+          <svg class="hiw__svg" viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
             <defs>
               <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--stream)" />
@@ -611,9 +691,6 @@ body {
               <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
               </marker>
-              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="rgba(15,23,42,0.08)" />
-              </filter>
             </defs>
 
             <!-- Feed Water label -->
@@ -627,49 +704,49 @@ body {
             </g>
 
             <!-- INTAKE module -->
-            <g id="m-intake" class="module cots" filter="url(#softShadow)">
+            <g id="m-intake" class="module cots">
               <rect x="200" y="110" width="160" height="75" rx="12" class="moduleBox"/>
               <text x="280" y="140" text-anchor="middle" class="moduleTitle">INTAKE</text>
               <text x="280" y="160" text-anchor="middle" class="moduleSub">& Stabilization</text>
             </g>
 
             <!-- GAS-SORBENT DOSING module (core) -->
-            <g id="m-dosing" class="module core" filter="url(#softShadow)">
+            <g id="m-dosing" class="module core">
               <rect x="420" y="110" width="180" height="75" rx="12" class="moduleBox"/>
               <text x="510" y="140" text-anchor="middle" class="moduleTitle">GAS-SORBENT</text>
               <text x="510" y="160" text-anchor="middle" class="moduleSub">Dosing</text>
             </g>
 
             <!-- SORPTION module (core) -->
-            <g id="m-sorption" class="module core" filter="url(#softShadow)">
+            <g id="m-sorption" class="module core">
               <rect x="660" y="240" width="180" height="75" rx="12" class="moduleBox"/>
               <text x="750" y="270" text-anchor="middle" class="moduleTitle">SORPTION</text>
               <text x="750" y="290" text-anchor="middle" class="moduleSub">(Contactor)</text>
             </g>
 
             <!-- SEPARATION module (core) -->
-            <g id="m-separation" class="module core" filter="url(#softShadow)">
+            <g id="m-separation" class="module core">
               <rect x="660" y="360" width="180" height="75" rx="12" class="moduleBox"/>
               <text x="750" y="390" text-anchor="middle" class="moduleTitle">SEPARATION</text>
               <text x="750" y="410" text-anchor="middle" class="moduleSub">(Phase split)</text>
             </g>
 
             <!-- POLISHING module (cots) -->
-            <g id="m-polishing" class="module cots" filter="url(#softShadow)">
+            <g id="m-polishing" class="module cots">
               <rect x="900" y="360" width="160" height="75" rx="12" class="moduleBox"/>
               <text x="980" y="390" text-anchor="middle" class="moduleTitle">POLISHING</text>
               <text x="980" y="410" text-anchor="middle" class="moduleSub">& Mineral.</text>
             </g>
 
             <!-- DRINKING WATER (product) -->
-            <g id="m-product" class="module product" filter="url(#softShadow)">
+            <g id="m-product" class="module product">
               <rect x="900" y="490" width="160" height="70" rx="12" class="moduleBox"/>
               <text x="980" y="520" text-anchor="middle" class="moduleTitle">DRINKING</text>
               <text x="980" y="540" text-anchor="middle" class="moduleSub">Water</text>
             </g>
 
             <!-- CONCENTRATE -->
-            <g id="m-concentrate" class="module concentrate" filter="url(#softShadow)">
+            <g id="m-concentrate" class="module concentrate">
               <rect x="420" y="490" width="180" height="70" rx="12" class="moduleBox"/>
               <text x="510" y="520" text-anchor="middle" class="moduleTitle">CONCENTRATE</text>
               <text x="510" y="540" text-anchor="middle" class="moduleSub">&lt;5% flow</text>
@@ -804,6 +881,32 @@ body {
   const AUTOPLAY = true;
   const AUTOPLAY_INTERVAL = 5000; // 5 seconds per stage
   
+  // Debounce helper for performance
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+  
+  // Throttle helper to prevent excessive calls
+  function throttle(func, wait) {
+    let waiting = false;
+    return function executedFunction(...args) {
+      if (waiting) return;
+      func(...args);
+      waiting = true;
+      setTimeout(() => {
+        waiting = false;
+      }, wait);
+    };
+  }
+  
   const stages = [
     {
       id: 'intake',
@@ -861,27 +964,42 @@ body {
   let autoplayTimer = null;
   
   function setActiveStage(index, pauseAutoplay = false) {
+    // Prevent unnecessary updates
+    if (currentStage === index && !pauseAutoplay) return;
+    
     currentStage = index;
     
-    // Clear all active states
-    tabs.forEach(tab => tab.classList.remove('is-active'));
-    sidebarItems.forEach(item => item.classList.remove('is-active'));
-    Object.values(moduleMap).forEach(module => module.classList.remove('is-active'));
-    
-    // Set new active states
-    tabs[index].classList.add('is-active');
-    sidebarItems[index].classList.add('is-active');
-    
+    // Batch DOM reads first (avoid layout thrashing)
     const stage = stages[index];
     const module = moduleMap[stage.id];
-    if (module) {
-      module.classList.add('is-active');
-    }
     
-    // Update detail text
-    detailKicker.textContent = stage.kicker;
-    detailTitle.textContent = stage.title;
-    detailText.textContent = stage.detail;
+    // Batch DOM writes using requestAnimationFrame
+    requestAnimationFrame(() => {
+      // Use className manipulation for better performance than classList in loops
+      // Clear all active states
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('is-active');
+        sidebarItems[i].classList.remove('is-active');
+      }
+      
+      // Clear module active states
+      for (const key in moduleMap) {
+        moduleMap[key].classList.remove('is-active');
+      }
+      
+      // Set new active states (batched)
+      tabs[index].classList.add('is-active');
+      sidebarItems[index].classList.add('is-active');
+      
+      if (module) {
+        module.classList.add('is-active');
+      }
+      
+      // Update text content (batched)
+      detailKicker.textContent = stage.kicker;
+      detailTitle.textContent = stage.title;
+      detailText.textContent = stage.detail;
+    });
     
     // Reset autoplay if needed
     if (pauseAutoplay && AUTOPLAY) {
@@ -895,19 +1013,33 @@ body {
     setActiveStage(next, false);
   }
   
-  // Tab click handlers
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => {
-      setActiveStage(index, true);
-    });
-  });
+  // Event delegation for tabs (more efficient than individual listeners)
+  const tabsContainer = document.querySelector('.hiw__tabs');
+  if (tabsContainer) {
+    tabsContainer.addEventListener('click', (e) => {
+      const tab = e.target.closest('.hiw__tab');
+      if (!tab) return;
+      
+      const index = Array.from(tabs).indexOf(tab);
+      if (index !== -1) {
+        setActiveStage(index, true);
+      }
+    }, { passive: false });
+  }
   
-  // Sidebar item click handlers
-  sidebarItems.forEach((item, index) => {
-    item.addEventListener('click', () => {
-      setActiveStage(index, true);
-    });
-  });
+  // Event delegation for sidebar items
+  const sidebarList = document.querySelector('.hiw__stage-list');
+  if (sidebarList) {
+    sidebarList.addEventListener('click', (e) => {
+      const item = e.target.closest('.hiw__stage-item');
+      if (!item) return;
+      
+      const index = Array.from(sidebarItems).indexOf(item);
+      if (index !== -1) {
+        setActiveStage(index, true);
+      }
+    }, { passive: false });
+  }
   
   // Initialize
   setActiveStage(0);
@@ -917,16 +1049,38 @@ body {
     autoplayTimer = setInterval(nextStage, AUTOPLAY_INTERVAL);
   }
   
-  // Pause autoplay on hover
+  // Pause autoplay on hover (passive listeners)
   const panel = document.querySelector('.hiw__interactive-panel');
   if (panel && AUTOPLAY) {
     panel.addEventListener('mouseenter', () => {
       clearInterval(autoplayTimer);
-    });
+    }, { passive: true });
     
     panel.addEventListener('mouseleave', () => {
       autoplayTimer = setInterval(nextStage, AUTOPLAY_INTERVAL);
-    });
+    }, { passive: true });
+  }
+  
+  // Pause autoplay when section is not visible (performance)
+  if (AUTOPLAY && 'IntersectionObserver' in window) {
+    const section = document.getElementById('how-it-works');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          // Section is not visible, pause autoplay
+          clearInterval(autoplayTimer);
+        } else {
+          // Section is visible, resume autoplay
+          if (autoplayTimer === null) {
+            autoplayTimer = setInterval(nextStage, AUTOPLAY_INTERVAL);
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    if (section) {
+      observer.observe(section);
+    }
   }
 })();
 </script>
