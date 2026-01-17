@@ -171,24 +171,25 @@ body {
   display: block;
 }
 
-/* Legend positioned in diagram area */
+/* Legend positioned in center under modules */
 .hiw__legend {
   position: absolute;
-  left: 20px;
-  bottom: 20px;
-  width: 280px;
-  padding: 16px 18px;
-  background: rgba(255,255,255,0.9);
-  border: 1px solid rgba(15,23,42,0.12);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 50px;
+  width: 320px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(15,23,42,0.14);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(15,23,42,0.06);
 }
 
 .hiw__legend-title {
   font: 800 10px ui-monospace, monospace;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: rgba(15,23,42,0.7);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   text-transform: uppercase;
 }
 
@@ -196,17 +197,19 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-bottom: 12px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(206,216,226,0.35);
 }
 
-.hiw__legend-item:last-of-type {
-  margin-bottom: 0;
+.hiw__legend-item:first-of-type {
+  border-top: none;
+  padding-top: 0;
 }
 
 .hiw__legend-swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
   border: 2px solid;
   flex-shrink: 0;
   margin-top: 2px;
@@ -214,39 +217,35 @@ body {
 
 .hiw__legend-swatch.core {
   background: var(--core-fill);
-  border-color: rgba(0,158,186,0.6);
+  border-color: rgba(0,158,186,0.7);
 }
 
 .hiw__legend-swatch.cots {
   background: #fff;
-  border-color: rgba(100,116,139,0.4);
+  border-color: rgba(186,198,211,0.8);
 }
 
 .hiw__legend-label {
   font: 500 11px/1.4 ui-sans-serif, system-ui;
-  color: rgba(15,23,42,0.75);
-}
-
-.hiw__legend-muted {
-  color: rgba(71,85,105,0.7);
+  color: rgba(15,23,42,0.82);
 }
 
 .hiw__legend-note {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(206,216,226,0.4);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(206,216,226,0.35);
 }
 
 .hiw__legend-note-text {
-  font: 400 10px/1.5 ui-sans-serif, system-ui;
-  color: rgba(71,85,105,0.8);
+  font: 400 10.5px/1.5 ui-sans-serif, system-ui;
+  color: rgba(71,85,105,0.85);
 }
 
 .hiw__legend-note-strong {
   display: block;
   margin-top: 6px;
-  font-weight: 600;
-  color: rgba(15,23,42,0.75);
+  font-weight: 700;
+  color: rgba(15,23,42,0.82);
 }
 
 /* Interactive panel */
@@ -495,28 +494,30 @@ body {
           </svg>
         </div>
 
-        <!-- Legend positioned in left area -->
+        <!-- Legend centered under main modules -->
         <div class="hiw__legend">
           <div class="hiw__legend-title">LEGEND</div>
           
           <div class="hiw__legend-item">
             <span class="hiw__legend-swatch core"></span>
             <div class="hiw__legend-label">
-              AQUINTAQA core module boundary <span class="hiw__legend-muted">(sealed / protected)</span>
+              AQUINTAQA core module boundary (sealed / protected)
             </div>
           </div>
           
           <div class="hiw__legend-item">
             <span class="hiw__legend-swatch cots"></span>
             <div class="hiw__legend-label">
-              COTS-based auxiliary systems <span class="hiw__legend-muted">(intake, utilities, polishing)</span>
+              COTS-based auxiliary systems (intake, utilities, polishing, ...)
             </div>
           </div>
           
           <div class="hiw__legend-note">
             <div class="hiw__legend-note-text">
               Note: sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.
-              <span class="hiw__legend-note-strong">Colour coding applies to modules only, not to streams.</span>
+            </div>
+            <div class="hiw__legend-note-strong">
+              Colour coding applies to modules only, not to streams.
             </div>
           </div>
         </div>
