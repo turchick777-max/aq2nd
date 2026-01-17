@@ -157,6 +157,7 @@ body {
 }
 
 .hiw__diagram-wrapper {
+  position: relative;
   background: rgba(255,255,255,0.4);
   border: 1px solid rgba(15,23,42,0.1);
   border-radius: 14px;
@@ -170,21 +171,36 @@ body {
   display: block;
 }
 
-/* Legend under diagram */
+/* Legend positioned in diagram area */
 .hiw__legend {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  padding: 12px 20px;
-  background: rgba(255,255,255,0.5);
-  border: 1px solid rgba(15,23,42,0.08);
+  position: absolute;
+  left: 20px;
+  bottom: 90px;
+  width: 280px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(15,23,42,0.12);
   border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(15,23,42,0.04);
+}
+
+.hiw__legend-title {
+  font: 800 10px ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  color: rgba(15,23,42,0.7);
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
 .hiw__legend-item {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.hiw__legend-item:last-of-type {
+  margin-bottom: 0;
 }
 
 .hiw__legend-swatch {
@@ -192,6 +208,8 @@ body {
   height: 14px;
   border-radius: 3px;
   border: 2px solid;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .hiw__legend-swatch.core {
@@ -205,8 +223,30 @@ body {
 }
 
 .hiw__legend-label {
-  font: 500 11px/1.3 ui-sans-serif, system-ui;
-  color: rgba(15,23,42,0.7);
+  font: 500 11px/1.4 ui-sans-serif, system-ui;
+  color: rgba(15,23,42,0.75);
+}
+
+.hiw__legend-muted {
+  color: rgba(71,85,105,0.7);
+}
+
+.hiw__legend-note {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(206,216,226,0.4);
+}
+
+.hiw__legend-note-text {
+  font: 400 10px/1.5 ui-sans-serif, system-ui;
+  color: rgba(71,85,105,0.8);
+}
+
+.hiw__legend-note-strong {
+  display: block;
+  margin-top: 6px;
+  font-weight: 600;
+  color: rgba(15,23,42,0.75);
 }
 
 /* Interactive panel */
@@ -441,13 +481,13 @@ body {
             </g>
 
             <!-- Arrow Separation to Concentrate -->
-            <path d="M 580 180 L 580 240 L 475 240 L 475 275" class="stream concentrate" marker-end="url(#arrowConc)"/>
+            <path d="M 580 180 L 580 240 L 525 240 L 525 275" class="stream concentrate" marker-end="url(#arrowConc)"/>
 
             <!-- CONCENTRATE -->
             <g id="m-concentrate" class="module concentrate">
-              <rect x="340" y="275" width="270" height="55" rx="8" class="moduleBox"/>
-              <text x="475" y="300" text-anchor="middle" class="moduleTitle">Concentrate / residual stream</text>
-              <text x="475" y="315" text-anchor="middle" class="moduleSub">(typically &lt;5% of flow; controlled output)</text>
+              <rect x="390" y="275" width="270" height="55" rx="8" class="moduleBox"/>
+              <text x="525" y="300" text-anchor="middle" class="moduleTitle">Concentrate / residual stream</text>
+              <text x="525" y="315" text-anchor="middle" class="moduleSub">(typically &lt;5% of flow; controlled output)</text>
             </g>
 
             <!-- Core boundary -->
@@ -455,15 +495,29 @@ body {
           </svg>
         </div>
 
-        <!-- Legend centered under diagram -->
+        <!-- Legend positioned in left area -->
         <div class="hiw__legend">
+          <div class="hiw__legend-title">LEGEND</div>
+          
           <div class="hiw__legend-item">
             <span class="hiw__legend-swatch core"></span>
-            <span class="hiw__legend-label">AQUINTAQA core module boundary (sealed / protected)</span>
+            <div class="hiw__legend-label">
+              AQUINTAQA core module boundary <span class="hiw__legend-muted">(sealed / protected)</span>
+            </div>
           </div>
+          
           <div class="hiw__legend-item">
             <span class="hiw__legend-swatch cots"></span>
-            <span class="hiw__legend-label">COTS-based auxiliary systems (intake, utilities, polishing)</span>
+            <div class="hiw__legend-label">
+              COTS-based auxiliary systems <span class="hiw__legend-muted">(intake, utilities, polishing)</span>
+            </div>
+          </div>
+          
+          <div class="hiw__legend-note">
+            <div class="hiw__legend-note-text">
+              Note: sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.
+              <span class="hiw__legend-note-strong">Colour coding applies to modules only, not to streams.</span>
+            </div>
           </div>
         </div>
       </div>
