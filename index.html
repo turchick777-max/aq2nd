@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HOW IT WORKS - AQUINTAQA</title>
+<!-- Performance hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <style>
 :root {
   /* Variant B — LOCKED (from PDF page 24-25) */
@@ -37,7 +39,8 @@
   --conc: #D28437;
   --conc-fill: #FCF0E5;
   
-  --shadow: 0 18px 50px rgba(15,23,42,0.08);
+  /* Optimized shadow using CSS var for consistency and caching */
+  --shadow: 0 12px 40px rgba(15,23,42,0.06);
 }
 
 * {
@@ -53,6 +56,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
+  /* Prevent text inflation on mobile */
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ===== Screen container with double grid ===== */
@@ -165,6 +170,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  /* Optimize rendering */
+  contain: layout style;
 }
 
 /* ===== Diagram Container ===== */
@@ -200,6 +207,13 @@ body {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  /* Prevent unnecessary pointer event handling */
+  pointer-events: none;
+}
+
+.hiw__diagram .module {
+  /* Re-enable pointer events only where needed */
+  pointer-events: auto;
 }
 
 .hiw__svg {
@@ -399,6 +413,9 @@ body {
   right: 0;
   height: 3px;
   background: var(--accent);
+  /* GPU optimization */
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Content area */
@@ -490,6 +507,8 @@ body {
   padding: 24px 28px;
   display: flex;
   flex-direction: column;
+  /* Optimize text rendering */
+  contain: layout style;
 }
 
 .hiw__detail-header {
