@@ -171,81 +171,68 @@ body {
   display: block;
 }
 
-/* Legend positioned in center under modules */
-.hiw__legend {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 50px;
-  width: 320px;
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.92);
-  border: 1px solid rgba(15,23,42,0.14);
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(15,23,42,0.06);
+/* Legend inside SVG - styles for foreignObject */
+.svg-legend {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-.hiw__legend-title {
-  font: 800 10px ui-monospace, monospace;
-  letter-spacing: 0.14em;
-  color: rgba(15,23,42,0.7);
-  margin-bottom: 10px;
+.svg-legend__title {
+  font: 700 9px ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  color: rgba(15,23,42,0.65);
+  margin-bottom: 8px;
   text-transform: uppercase;
 }
 
-.hiw__legend-item {
+.svg-legend__item {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  padding: 6px 0;
-  border-top: 1px solid rgba(206,216,226,0.35);
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
-.hiw__legend-item:first-of-type {
-  border-top: none;
-  padding-top: 0;
-}
-
-.hiw__legend-swatch {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  border: 2px solid;
+.svg-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1.5px solid;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
-.hiw__legend-swatch.core {
+.svg-legend__swatch.core {
   background: var(--core-fill);
   border-color: rgba(0,158,186,0.7);
 }
 
-.hiw__legend-swatch.cots {
+.svg-legend__swatch.cots {
   background: #fff;
   border-color: rgba(186,198,211,0.8);
 }
 
-.hiw__legend-label {
-  font: 500 11px/1.4 ui-sans-serif, system-ui;
-  color: rgba(15,23,42,0.82);
+.svg-legend__label {
+  font: 500 9px/1.35 ui-sans-serif, system-ui;
+  color: rgba(15,23,42,0.8);
 }
 
-.hiw__legend-note {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(206,216,226,0.35);
+.svg-legend__note {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(206,216,226,0.4);
 }
 
-.hiw__legend-note-text {
-  font: 400 10.5px/1.5 ui-sans-serif, system-ui;
-  color: rgba(71,85,105,0.85);
+.svg-legend__note-text {
+  font: 400 8.5px/1.45 ui-sans-serif, system-ui;
+  color: rgba(71,85,105,0.8);
+  font-style: italic;
 }
 
-.hiw__legend-note-strong {
+.svg-legend__note-strong {
   display: block;
-  margin-top: 6px;
-  font-weight: 700;
-  color: rgba(15,23,42,0.82);
+  margin-top: 5px;
+  font: 600 8.5px/1.4 ui-sans-serif, system-ui;
+  color: rgba(15,23,42,0.8);
+  font-style: normal;
 }
 
 /* Interactive panel */
@@ -401,7 +388,7 @@ body {
       <!-- Diagram area -->
       <div class="hiw__diagram-area">
         <div class="hiw__diagram-wrapper">
-          <svg class="hiw__svg" viewBox="0 0 950 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <svg class="hiw__svg" viewBox="0 0 950 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
             <defs>
               <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--stream)" />
@@ -480,46 +467,37 @@ body {
             </g>
 
             <!-- Arrow Separation to Concentrate -->
-            <path d="M 580 180 L 580 240 L 525 240 L 525 275" class="stream concentrate" marker-end="url(#arrowConc)"/>
+            <path d="M 580 180 L 580 225 L 635 225 L 635 250" class="stream concentrate" marker-end="url(#arrowConc)"/>
+
+            <!-- LEGEND - left of Concentrate -->
+            <foreignObject x="20" y="215" width="340" height="140">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="svg-legend">
+                <div class="svg-legend__title">LEGEND</div>
+                <div class="svg-legend__item">
+                  <span class="svg-legend__swatch core"></span>
+                  <span class="svg-legend__label">AQUINTAQA core module boundary (encapsulated/protected)</span>
+                </div>
+                <div class="svg-legend__item">
+                  <span class="svg-legend__swatch cots"></span>
+                  <span class="svg-legend__label">COTS-based auxiliary systems (intake, utilities, polishing, controls)</span>
+                </div>
+                <div class="svg-legend__note">
+                  <div class="svg-legend__note-text">Note: sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.</div>
+                  <div class="svg-legend__note-strong">Colour coding applies to modules only, not to streams.</div>
+                </div>
+              </div>
+            </foreignObject>
 
             <!-- CONCENTRATE -->
             <g id="m-concentrate" class="module concentrate">
-              <rect x="390" y="275" width="270" height="55" rx="8" class="moduleBox"/>
-              <text x="525" y="300" text-anchor="middle" class="moduleTitle">Concentrate / residual stream</text>
-              <text x="525" y="315" text-anchor="middle" class="moduleSub">(typically &lt;5% of flow; controlled output)</text>
+              <rect x="500" y="255" width="270" height="55" rx="8" class="moduleBox"/>
+              <text x="635" y="280" text-anchor="middle" class="moduleTitle">Concentrate / residual stream</text>
+              <text x="635" y="295" text-anchor="middle" class="moduleSub">(typically &lt;5% of flow; controlled output)</text>
             </g>
 
             <!-- Core boundary -->
             <rect x="178" y="118" width="475" height="70" rx="10" class="coreBoundary"/>
           </svg>
-        </div>
-
-        <!-- Legend centered under main modules -->
-        <div class="hiw__legend">
-          <div class="hiw__legend-title">LEGEND</div>
-          
-          <div class="hiw__legend-item">
-            <span class="hiw__legend-swatch core"></span>
-            <div class="hiw__legend-label">
-              AQUINTAQA core module boundary (sealed / protected)
-            </div>
-          </div>
-          
-          <div class="hiw__legend-item">
-            <span class="hiw__legend-swatch cots"></span>
-            <div class="hiw__legend-label">
-              COTS-based auxiliary systems (intake, utilities, polishing, ...)
-            </div>
-          </div>
-          
-          <div class="hiw__legend-note">
-            <div class="hiw__legend-note-text">
-              Note: sensitive setpoints, materials, and core control logic are disclosed stepwise under NDA.
-            </div>
-            <div class="hiw__legend-note-strong">
-              Colour coding applies to modules only, not to streams.
-            </div>
-          </div>
         </div>
       </div>
     </div>
