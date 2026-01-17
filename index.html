@@ -89,6 +89,9 @@ body {
   border: 2px solid var(--frame);
   border-radius: 20px;
   pointer-events: none;
+  /* Optimize rendering */
+  contain: layout style paint;
+  transform: translateZ(0);
 }
 
 .hiw__frame::after {
@@ -97,6 +100,8 @@ body {
   inset: 10px;
   border: 1px solid var(--frame2);
   border-radius: 16px;
+  /* Optimize pseudo-element */
+  will-change: auto;
 }
 
 .hiw__corner {
@@ -104,6 +109,8 @@ body {
   width: 18px;
   height: 18px;
   border-color: var(--frame);
+  /* Optimize rendering */
+  contain: layout style paint;
 }
 
 .hiw__corner.tl {
@@ -208,11 +215,15 @@ body {
 .svgLabel {
   font: 600 14px ui-sans-serif, system-ui;
   fill: rgba(15,23,42,.75);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .svgSubLabel {
   font: 500 12px ui-sans-serif, system-ui;
   fill: rgba(71,85,105,.78);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .svgCalloutBox {
@@ -224,6 +235,8 @@ body {
 .svgCalloutText {
   font: 600 12px ui-sans-serif, system-ui;
   fill: rgba(15,23,42,.78);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .moduleBox {
@@ -239,35 +252,47 @@ body {
   font: 700 15px ui-sans-serif, system-ui;
   fill: rgba(15,23,42,.85);
   letter-spacing: 0.04em;
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 .module .moduleSub {
   font: 500 12px ui-sans-serif, system-ui;
   fill: rgba(71,85,105,.82);
+  /* Optimize SVG text rendering */
+  text-rendering: optimizeSpeed;
 }
 
 /* Core modules */
 .module.core .moduleBox {
   fill: var(--core-fill);
   stroke: rgba(0,158,186,.75);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 /* COTS modules */
 .module.cots .moduleBox {
   fill: var(--cots-fill);
   stroke: var(--cots-stroke);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 /* Product */
 .module.product .moduleBox {
   fill: rgba(212,241,246,.75);
   stroke: rgba(0,158,186,.65);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 /* Concentrate */
 .module.concentrate .moduleBox {
   fill: var(--conc-fill);
   stroke: rgba(210,132,55,.85);
+  /* CSS shadow instead of SVG filter */
+  filter: drop-shadow(0 3px 5px rgba(15,23,42,0.05));
 }
 
 .module.concentrate .moduleTitle {
@@ -639,7 +664,7 @@ body {
         <div class="hiw__watermark" aria-hidden="true"></div>
         
         <div class="hiw__diagram">
-          <svg class="hiw__svg" viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg">
+          <svg class="hiw__svg" viewBox="0 0 1100 600" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
             <defs>
               <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--stream)" />
@@ -647,10 +672,6 @@ body {
               <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
               </marker>
-              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <!-- Optimized shadow with reduced blur -->
-                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(15,23,42,0.06)" />
-              </filter>
             </defs>
 
             <!-- Feed Water label -->
@@ -664,49 +685,49 @@ body {
             </g>
 
             <!-- INTAKE module -->
-            <g id="m-intake" class="module cots" filter="url(#softShadow)">
+            <g id="m-intake" class="module cots">
               <rect x="200" y="110" width="160" height="75" rx="12" class="moduleBox"/>
               <text x="280" y="140" text-anchor="middle" class="moduleTitle">INTAKE</text>
               <text x="280" y="160" text-anchor="middle" class="moduleSub">& Stabilization</text>
             </g>
 
             <!-- GAS-SORBENT DOSING module (core) -->
-            <g id="m-dosing" class="module core" filter="url(#softShadow)">
+            <g id="m-dosing" class="module core">
               <rect x="420" y="110" width="180" height="75" rx="12" class="moduleBox"/>
               <text x="510" y="140" text-anchor="middle" class="moduleTitle">GAS-SORBENT</text>
               <text x="510" y="160" text-anchor="middle" class="moduleSub">Dosing</text>
             </g>
 
             <!-- SORPTION module (core) -->
-            <g id="m-sorption" class="module core" filter="url(#softShadow)">
+            <g id="m-sorption" class="module core">
               <rect x="660" y="240" width="180" height="75" rx="12" class="moduleBox"/>
               <text x="750" y="270" text-anchor="middle" class="moduleTitle">SORPTION</text>
               <text x="750" y="290" text-anchor="middle" class="moduleSub">(Contactor)</text>
             </g>
 
             <!-- SEPARATION module (core) -->
-            <g id="m-separation" class="module core" filter="url(#softShadow)">
+            <g id="m-separation" class="module core">
               <rect x="660" y="360" width="180" height="75" rx="12" class="moduleBox"/>
               <text x="750" y="390" text-anchor="middle" class="moduleTitle">SEPARATION</text>
               <text x="750" y="410" text-anchor="middle" class="moduleSub">(Phase split)</text>
             </g>
 
             <!-- POLISHING module (cots) -->
-            <g id="m-polishing" class="module cots" filter="url(#softShadow)">
+            <g id="m-polishing" class="module cots">
               <rect x="900" y="360" width="160" height="75" rx="12" class="moduleBox"/>
               <text x="980" y="390" text-anchor="middle" class="moduleTitle">POLISHING</text>
               <text x="980" y="410" text-anchor="middle" class="moduleSub">& Mineral.</text>
             </g>
 
             <!-- DRINKING WATER (product) -->
-            <g id="m-product" class="module product" filter="url(#softShadow)">
+            <g id="m-product" class="module product">
               <rect x="900" y="490" width="160" height="70" rx="12" class="moduleBox"/>
               <text x="980" y="520" text-anchor="middle" class="moduleTitle">DRINKING</text>
               <text x="980" y="540" text-anchor="middle" class="moduleSub">Water</text>
             </g>
 
             <!-- CONCENTRATE -->
-            <g id="m-concentrate" class="module concentrate" filter="url(#softShadow)">
+            <g id="m-concentrate" class="module concentrate">
               <rect x="420" y="490" width="180" height="70" rx="12" class="moduleBox"/>
               <text x="510" y="520" text-anchor="middle" class="moduleTitle">CONCENTRATE</text>
               <text x="510" y="540" text-anchor="middle" class="moduleSub">&lt;5% flow</text>
